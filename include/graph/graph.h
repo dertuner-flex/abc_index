@@ -1,7 +1,9 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
 #include <cassert>
+#include <cstdint>
 
 class UndirectedGraph {
 public:
@@ -11,6 +13,11 @@ public:
 	int CountVertex() const;
 	int CountEdge() const;
 	std::vector<std::vector<int>> AdjMatrix() const;
+	const std::vector<std::vector<int>> AdjList() const;
+	void PrintAdjMatrix(std::ostream& out = std::cout) const;
+	static std::vector<std::vector<int>> ConvertAdjMatrixToAdjList(const std::vector<std::vector<int>>& adj_matrix);
+	static std::vector<std::vector<int>> ConvertAdjListToAdjMatrix(const std::vector<std::vector<int>>& adj_list);
+	void Serialize(std::ostream& out);
 private:
 	int CalculateCountEdge() const;
 	int count_vertex_;
@@ -18,18 +25,5 @@ private:
 	std::vector<std::vector<int>> adj_list_;
 };
 
-
-UndirectedGraph GenerateKthSimpleGraph(int n_vertex, uint64_t bit_representation) {
-	assert(n_vertex <= 8);
-	uint64_t step = 0;
-	std::vector<std::vector<int>> adj_matrix(n_vertex, std::vector<int>(n_vertex, 0));
-	for (int i = 0; i < n_vertex; ++i) {
-		for (int j = 0; j < n_vertex - i; ++j) {
-			adj_matrix[i][j] = (bit_representation >> step) & 1;
-			++step;
-			adj_matrix[j][i] = adj_matrix[i][j];
-		}
-	}
-
-
-}
+UndirectedGraph GenerateKthSimpleGraph(int n_vertex, uint64_t bit_representation);
+std::vector<UndirectedGraph> GenerateAllSimpleGraph(int n_vertex);

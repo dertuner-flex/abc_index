@@ -12,7 +12,7 @@ bool check_isomorphism(const UndirectedGraph& first, const UndirectedGraph& seco
 
 	std::vector<int> current_permutation(n_vertex);
 	for (int i = 1; i <= n_vertex; ++i) {
-		current_permutation[i] = i;
+		current_permutation[i - 1] = i - 1;
 	}
 
 	auto adj_matrix_first = first.AdjMatrix();
