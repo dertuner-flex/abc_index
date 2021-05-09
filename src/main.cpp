@@ -7,16 +7,24 @@
 int main() {
 	const double EPS = 1e-6;
 	auto all_graph = GenerateAllSimpleGraph(6);
-	
-	for (size_t i = 0; i < all_graph.size(); ++i) {
-		for (size_t j = 0; j < all_graph.size(); ++j) {
+	int count_tree = 0; 
+	std::cout << all_graph.size() << std::endl;
+	for (const auto& graph : all_graph) {
+		count_tree += IsTree(graph);
+	}
+
+	std::cout << count_tree << std::endl;
+
+	for (int i = static_cast<int>(all_graph.size()) - 1; i >= 0; --i) {
+		for (int j = static_cast<int>(all_graph.size()) - 1; j >= 0; --j) {
 			if (i == j) {
 				continue;
 			}
 			double index_first = abc_index(all_graph[i]);
 			double index_second = abc_index(all_graph[j]);
 
-			if (all_graph[i].CountEdge() == all_graph[j].CountEdge() && std::fabs(index_first - index_second) < EPS 
+			if (all_graph[i].CountEdge() == all_graph[j].CountEdge() && IsTree(all_graph[i]) && IsTree(all_graph[j]) 
+				&& std::fabs(index_first - index_second) < EPS  
 				&& !check_isomorphism(all_graph[i], all_graph[j])) {
 				std::cout << "different graph with same ABC-index" << std::endl;
 				std::cout << "first graph:" << std::endl;
@@ -27,7 +35,8 @@ int main() {
 			}
 		}
 	}
-	
+
+
 	//for (const auto& graph : all_graph) {
 	//	graph.PrintAdjMatrix();
 	//	std::cout << abc_index(graph) << std::endl;

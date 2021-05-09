@@ -10,7 +10,7 @@ int UndirectedGraph::CountVertex() const {
 }
 
 int UndirectedGraph::CountEdge() const {
-	return count_edge_;
+	return CalculateCountEdge();
 }
 
 int UndirectedGraph::CalculateCountEdge() const {
@@ -123,4 +123,29 @@ std::vector<UndirectedGraph> GenerateAllSimpleGraph(int n_vertex) {
 		result.push_back(GenerateKthSimpleGraph(n_vertex, current_representation));
 	}
 	return result;
+}
+
+bool UndirectedGraph::IsConnected() const {
+	std::vector<bool> used(count_vertex_, false);
+	const int start_vertex = 0;
+	DFS(start_vertex, &used);
+	for (const auto& status : used) {
+		if (!status) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void UndirectedGraph::DFS(int vertex, std::vector<bool>* used) const {
+	(*used)[vertex] = true;
+	for (const auto& to : adj_list_[vertex]) {
+		if (!(*used)[to]) {
+			DFS(to, used);
+		}
+	}
+}
+
+bool IsTree(const UndirectedGraph& graph) {
+	return (graph.CountEdge() == graph.CountVertex() - 1) && graph.IsConnected();
 }

@@ -18,7 +18,9 @@ public:
 	static std::vector<std::vector<int>> ConvertAdjMatrixToAdjList(const std::vector<std::vector<int>>& adj_matrix);
 	static std::vector<std::vector<int>> ConvertAdjListToAdjMatrix(const std::vector<std::vector<int>>& adj_list);
 	void Serialize(std::ostream& out);
+	bool IsConnected() const;
 private:
+	void DFS(int vertex, std::vector<bool>* used) const;
 	int CalculateCountEdge() const;
 	int count_vertex_;
 	int count_edge_;
@@ -27,3 +29,4 @@ private:
 
 UndirectedGraph GenerateKthSimpleGraph(int n_vertex, uint64_t bit_representation);
 std::vector<UndirectedGraph> GenerateAllSimpleGraph(int n_vertex);
+bool IsTree(const UndirectedGraph& graph);
