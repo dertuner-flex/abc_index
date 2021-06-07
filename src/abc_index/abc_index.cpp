@@ -1,5 +1,4 @@
 #include "abc_index.h"
-#include "graph.h"
 
 double abc_index(const UndirectedGraph& graph) {
 	auto degrees = graph.AllDegrees();
@@ -41,5 +40,42 @@ std::vector<std::pair<UndirectedGraph, UndirectedGraph>> FindAllPairNonIsomorphi
 			}
 		}
 	}
+}
 
+bool operator<(const UndirectedGraph& first, const UndirectedGraph& second) {
+	return first.CountVertex() < second.CountVertex();
+}
+
+int FianAllKekTree(int count_vertex) {
+	auto all_graph = GenerateAllSimpleGraph(count_vertex);
+	std::vector<UndirectedGraph> all_tree;
+	
+	for (const auto& graph : all_graph) {
+		if (IsTree(graph)) {
+			all_tree.push_back(graph);
+		}
+	}
+	
+	std::vector<std::pair<double, UndirectedGraph>> idx;
+	for (const auto& graph : all_tree) {
+		idx.push_back({abc_index(graph), graph});
+	}
+	int cnt = 0;
+	std::sort(idx.begin(), idx.end());
+	for (int i = 1; i < static_cast<int>(idx.size()); ++i) {
+		if (std::fabs(idx[i].first - idx[i - 1].first) < 1e-6) {
+			auto g_first = idx[i - 1].second;
+			auto g_second = idx[i].second;
+			if (g_first.CountEdge() == g_second.CountEdge() && !check_isomorphism(g_first, g_second)) {
+				++cnt;
+				std::cout << "first graph:" << std::endl;
+				g_first.PrintAdjMatrix();
+				std::cout << "second graph:" << std::endl;
+				g_second.PrintAdjMatrix();
+
+			}
+		}
+	}
+	
+	return cnt;
 }
